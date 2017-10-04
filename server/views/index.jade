@@ -1,6 +1,18 @@
 extends ../include/layout
 
 block main-content
+    .navbar.navbar-inverse.navbar-fixed-top
+        .container
+            .navbar-header
+                a.navbar-brand(href="/") Multivision
+                    h6
+            .navbar-collapse.collapse
+                ul.nav.navbar-nav
+                    li
+                        a(href="/") Home
     section.content
         div(ng-view)
-     h2= mongoMessage
+    h2= mongoMessage
+
+    footer.container.text-center
+        p &copy; Multivision corp
