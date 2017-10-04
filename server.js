@@ -27,10 +27,18 @@ app.use(express.static(__dirname + '/public'));
 mongoose.connect('mongodb://localhost/multivision');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongodb : connection error...'));
-db.on('open', function(){
+db.on('open', function () {
   console.log('mongodb : database connected');
 });
-
+//message schema setup
+var messageSchema = mongoose.Schema({
+  message: String
+});
+var Message = mongoose.model('Message', messageSchema);
+var mongoMessage;
+Message.findOne().exec(function (err, messageDoc) {
+  mongoMessage = messageDoc.message;
+});
 
 //angular partials setup
 app.get('/partials/:partialPath', function (req, res) {
@@ -46,10 +54,11 @@ app.set('views', __dirname + '/server/views');
 app.set('view engine', 'jade');
 
 
-
 app.get('*', function (req, res) {
   console.log('render index');
-  res.render('index');
+  res.render('index', {
+    mongoMessage : mongoMessage
+  });
 });
 
 var port = 3030;
