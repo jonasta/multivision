@@ -5,7 +5,7 @@ var express = require('express'),
   mongoose = require('mongoose');
 
 
-var env = process.env.NODE_ENV = process.env.NODE_ENV | 'development';
+var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var app = express();
 
 //stylus - compile function
@@ -24,7 +24,12 @@ app.use(stylus.middleware(
 app.use(express.static(__dirname + '/public'));
 
 //mongodb setup
-mongoose.connect('mongodb://localhost/multivision');
+if (env==='development'){
+  mongoose.connect('mongodb://localhost/multivision');
+}else{
+  mongoose.connect('mongodb://admin:admin@ds161164.mlab.com:61164/multivision');
+}
+
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongodb : connection error...'));
 db.on('open', function () {
@@ -61,6 +66,6 @@ app.get('*', function (req, res) {
   });
 });
 
-var port = 3030;
+var port = process.env.PORT || 3030;
 app.listen(port);
 console.log('listening on port ' + port);
