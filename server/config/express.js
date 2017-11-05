@@ -14,15 +14,13 @@ module.exports = function (app, config) {
   app.use(logger('dev'));
 
 
+  app.use(cookieParser());
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
-
-//passport
-  app.use(cookieParser());
-  app.use(session({secret: "my super secret", resave: false, saveUnitialized: false}));
+  app.use(session({secret: "my super secret", resave: false, saveUninitialized: false}));
+  //passport
   app.use(passport.initialize());
   app.use(passport.session());
-
 
 //stylus - compile function
   function compile(str, path) {
@@ -36,7 +34,9 @@ module.exports = function (app, config) {
     }
   ));
 
-//static route to /public
+  //static route to /public
   app.use(express.static(config.rootPath + '/public'));
+
+
 
 }
